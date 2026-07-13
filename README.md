@@ -3,6 +3,7 @@
 **Exposition** est  outil web gratuit destiné aux professionnels formés à la thérapie comportementale et cognitive et à la conduite des interventions par exposition.
 
 Il permet de préparer, conduire, documenter et consulter des exercices d’exposition en séance.
+Il est accessible depuis cette adresse : https://thierryk4072.github.io/Exposition/ 
 
 ## Fonctionnalités
 
