@@ -1,6 +1,7 @@
 # Exposition
 
-**Exposition** est  outil web gratuit destiné aux professionnels formés à la thérapie comportementale et cognitive et à la conduite des interventions par exposition.
+**Exposition** est un outil web gratuit destiné aux professionnels formés à la thérapie comportementale et cognitive et à la conduite des interventions par exposition.
+Il a été créé par Thierry Kosinski (Enseignant-chercheur en Psychopathologie Expérimentale et TCC) au Laboratoire PSITEC (ULR4072) de l'Université de Lille (France) (contact : thierry.kosinski@univ-lille.fr). 
 
 Il permet de préparer, conduire, documenter et consulter des exercices d’exposition en séance.
 Il est accessible depuis cette adresse : https://thierryk4072.github.io/Exposition/ 
