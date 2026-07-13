@@ -50,9 +50,7 @@ Les données sont enregistrées localement dans le navigateur de l’utilisateur
 Conséquences importantes :
 
 - les données ne sont pas automatiquement synchronisées entre les appareils ;
-- les données enregistrées sur un ordinateur ne sont pas automatiquement disponibles sur un iPad ;
-- la suppression des données du site ou du stockage du navigateur peut entraîner la perte de toutes les informations ;
-- une navigation privée peut empêcher la conservation durable des données ;
+- la suppression des données du site sur le navigateur peut entraîner la perte de toutes les informations ;
 - des sauvegardes régulières doivent être réalisées depuis l’onglet **Sauvegarde**.
 
 Utilisez uniquement des codes pseudonymisés et ne saisissez pas directement l’identité complète des patients.
@@ -61,4 +59,4 @@ Utilisez uniquement des codes pseudonymisés et ne saisissez pas directement l�
 
 ### Utilisation en ligne
 
-L’outil peut être publiée gratuitement avec GitHub Pages.
+L’outil est publiée gratuitement avec GitHub Pages.
