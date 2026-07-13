@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2457c5"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Exposition">
+<title>Exposition</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div><h1>Exposition</h1><small>Suivi des séances d’exposition</small></div></header>
+<nav><button data-v="home" class="active"><span class="nav-icon" aria-hidden="true">⌂</span><span class="nav-label">Accueil</span></button><button data-v="patients"><span class="nav-icon" aria-hidden="true">○</span><span class="nav-label">Patients</span></button><button data-v="optex"><span class="nav-icon" aria-hidden="true">◇</span><span class="nav-label">OptEx</span></button><button data-v="hierarchy"><span class="nav-icon" aria-hidden="true">≋</span><span class="nav-label">Hiérarchie</span></button><button data-v="script"><span class="nav-icon" aria-hidden="true">□</span><span class="nav-label">Script</span></button><button data-v="new"><span class="nav-icon" aria-hidden="true">+</span><span class="nav-label">Nouvelle exposition</span></button><button data-v="history"><span class="nav-icon" aria-hidden="true">◷</span><span class="nav-label">Historique d’exposition</span></button><button data-v="notice"><span class="nav-icon" aria-hidden="true">i</span><span class="nav-label">Notice</span></button><button data-v="backup"><span class="nav-icon" aria-hidden="true">⇅</span><span class="nav-label">Sauvegarde</span></button></nav>
+<main>
+
+
+
+
+<section id="home" class="view active">
+  <div class="home-layout home-layout-brief">
+    <div class="home-side home-side-main">
+      <div class="card home-brief-card">
+        <h2>En bref</h2>
+        <p>Pour utiliser l’outil :</p>
+        <ol class="home-brief-steps">
+          <li>Créez d’abord un patient (utilisez un code ou identifiant pseudonymisé plutôt que des données identifiantes).</li>
+          <li>Selon le besoin clinique, établissez une hiérarchie des peurs, complétez un OptEx Nexus ou rédigez un script.</li>
+          <li>Créez ensuite une nouvelle exposition et enregistrez les mesures utiles pendant l’exercice.</li>
+          <p>Vous pouvez aussi renseigner votre nom (champ 'Nom du professionnel' ci-contre), afin que votre nom apparaisse sur les documents téléchargés.</p>
+        </ol>
+        <div class="home-warning">
+          <strong>Important</strong>
+          <p>Cet outil est destiné aux professionnels formés à la thérapie par exposition. Il ne constitue pas un outil autonome, ni un dispositif médical et ne doit pas être utilisé sans maîtrise clinique de l’exposition, de ses indications, de ses contre-indications et de sa conduite.</p>
+          <p></p>
+          <strong>Stockage des données</strong>
+          <p>Cet outil ne nécessite aucune authentification. Par conséquent, toute personne ayant accès à votre navigateur pourra également accéder aux données enregistrées dans l'interface. </p>
+          <p>Si certaines informations saisies sont susceptibles de compromettre l’anonymat du patient, il est recommandé, à l’issue de la séance, d’exporter le compte rendu au format PDF, de l’enregistrer de manière sécurisée sur votre appareil, puis de supprimer l’exercice de l'interface afin que ces informations ne soient plus conservées dans le navigateur.</p>
+          <p>Aucune donnée n’est transmise à un serveur : les informations sont enregistrées localement dans le navigateur utilisé. Elles peuvent être perdues si les données du site ou le stockage du navigateur sont effacés. Il est donc recommandé d’effectuer régulièrement une sauvegarde depuis l’onglet Sauvegarde.</p>
+          <p></p>
+          <strong>Gratuit</strong>
+          
+        </div>
+        <div class="home-privacy">
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="home-side">
+      <div class="card">
+        <h3>Professionnel</h3>
+        <label>Nom du professionnel
+          <input id="psychologistName" placeholder="Ex. Dr Marie Dupont">
+        </label>
+        <button id="savePsychologistBtn" class="primary" type="button"><span class="button-icon" aria-hidden="true">✓</span>Enregistrer</button>
+      </div>
+
+      <div class="card">
+        <h3>Résumé</h3>
+        <p><strong id="pc">0</strong> patient(s)</p>
+        <p><strong id="sc">0</strong> séance(s)</p>
+      </div>
+    </div>
+  </div>
+
+<div class="tk-copyright">
+  <strong>Copyright © 2026 Thierry Kosinski</strong><br>
+  Tous droits réservés.<br><br>
+  Cet outil est mis gratuitement à disposition afin d'être utilisé dans un cadre clinique ou académique.
+</div>
+
+</section>
+
+
+
+
+
+<section id="patients" class="view">
+  <div class="patients-layout">
+    <div class="card">
+      <h2>Ajouter un patient</h2>
+      <form id="pf">
+        <label>Code pseudonymisé *<input id="pcode" required placeholder="PAT-001"></label>
+        <label>Problématique<textarea id="pnotes" rows="5"></textarea></label>
+        <button class="primary"><span class="button-icon" aria-hidden="true">✓</span>Enregistrer</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Patients enregistrés</h2>
+      <input id="patientListSearch" type="search" class="patient-list-search" placeholder="Rechercher un patient…">
+      <div id="plist"></div>
+    </div>
+    <div class="card patient-summary-card">
+      <div id="patientSummaryEmpty">
+        <h2>Dossier du patient</h2>
+        <p class="muted">Cliquez sur un patient pour afficher tout ce qui a été réalisé.</p>
+      </div>
+      <div id="patientSummaryPanel" class="hidden">
+        <h2 id="patientSummaryTitle"></h2>
+        <div id="patientSummaryContent"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="script" class="view">
+  <div class="module-header">
+    <div>
+      <h2>Script</h2><p class="module-subtitle">Préparez un souvenir traumatique ou un scénario catastrophe.</p>
+    </div>
+    <button id="newScriptBtn" class="secondary"><span class="button-icon" aria-hidden="true">+</span>Nouveau script</button>
+  </div>
+
+  <div class="module-layout">
+    <aside class="card module-list-card">
+      <h3>Scripts enregistrés</h3>
+      <label>Patient
+        <select id="scriptPatientFilter"></select>
+      </label>
+      <div id="scriptList" class="module-list"></div>
+    </aside>
+
+    <div class="card">
+      <form id="scriptForm">
+        <input id="scriptId" type="hidden">
+
+        <div class="grid">
+          <label>Patient *
+            <select id="scriptPatient" required></select>
+          </label>
+          <label>Type de script *
+            <select id="scriptType">
+              <option value="trauma">Souvenir traumatique</option>
+              <option value="catastrophe">Scénario catastrophe</option>
+            </select>
+          </label>
+          <label>Nom de l’événement ou du scénario *
+            <input id="scriptEventName" required placeholder="Ex. Accident de voiture ou Perdre mon emploi">
+          </label>
+        </div>
+
+        <div id="traumaScriptFields">
+        <div class="script-step">
+          <div class="script-editor">
+            <label><strong>Avant l’événement — en sécurité</strong>
+              <textarea id="scriptBefore" rows="8"></textarea>
+            </label>
+          </div>
+          <aside class="script-guidance">
+            <h4>Éléments à intégrer</h4>
+            <ul>
+              <li>Où êtes-vous ?</li>
+              <li>Qui est présent ?</li>
+              <li>Que faites-vous ?</li>
+              <li>À quoi ressemble l’environnement ?</li>
+              <li>Que pensez-vous avant que tout commence ?</li>
+              <li>Décrivez le contexte immédiatement antérieur.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="script-step">
+          <div class="script-editor">
+            <label><strong>Début de l’événement</strong>
+              <textarea id="scriptBeginning" rows="8"></textarea>
+            </label>
+          </div>
+          <aside class="script-guidance">
+            <h4>Éléments à intégrer</h4>
+            <ul>
+              <li>Le premier indice que quelque chose ne va pas.</li>
+              <li>Ce que vous voyez et entendez.</li>
+              <li>Les premières sensations corporelles.</li>
+              <li>Les premières pensées et émotions.</li>
+              <li>Rédigez au présent et à la première personne.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="script-step hotspot-step">
+          <div class="script-editor">
+            <label><strong>Hot spot</strong>
+              <textarea id="scriptHotspot" rows="12"></textarea>
+            </label>
+          </div>
+          <aside class="script-guidance">
+            <h4>Éléments à intégrer</h4>
+            <ul>
+              <li>Le moment le plus difficile.</li>
+              <li>Les images, sons et odeurs.</li>
+              <li>Les sensations physiques.</li>
+              <li>Les pensées et émotions.</li>
+              <li>Ce que vous faites.</li>
+              <li>Ce que font les autres.</li>
+              <li>Les conséquences redoutées.</li>
+              <li>Décrivez précisément ce moment sans l’analyser.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="script-step">
+          <div class="script-editor">
+            <label><strong>Fin de l’événement</strong>
+              <textarea id="scriptEnd" rows="8"></textarea>
+            </label>
+          </div>
+          <aside class="script-guidance">
+            <h4>Éléments à intégrer</h4>
+            <ul>
+              <li>Comment l’événement se termine.</li>
+              <li>Ce qui change dans la situation.</li>
+              <li>Ce que vous faites ensuite.</li>
+              <li>Ce que font les autres.</li>
+              <li>Le moment où le danger diminue ou disparaît.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="script-step">
+          <div class="script-editor">
+            <label><strong>Une fois l’événement terminé — de nouveau en sécurité</strong>
+              <textarea id="scriptAfter" rows="8"></textarea>
+            </label>
+          </div>
+          <aside class="script-guidance">
+            <h4>Éléments à intégrer</h4>
+            <ul>
+              <li>Le retour à la sécurité.</li>
+              <li>Les premières réactions après l’événement.</li>
+              <li>Les émotions et pensées.</li>
+              <li>Les personnes présentes.</li>
+              <li>Ce qui se passe dans les minutes qui suivent.</li>
+            </ul>
+          </aside>
+        </div>
+
+        
+        </div>
+
+        <div id="catastropheScriptFields" class="hidden">
+          <div class="script-step">
+            <div class="script-editor"><label><strong>Déclencheur et contexte initial</strong><textarea id="catastropheTrigger" rows="8"></textarea></label></div>
+            <aside class="script-guidance"><h4>Éléments à intégrer</h4><ul><li>La situation qui déclenche l’inquiétude.</li><li>Le lieu, le moment et les personnes présentes.</li><li>Le premier signe laissant penser que la catastrophe pourrait arriver.</li><li>Rédigez au présent et à la première personne.</li></ul></aside>
+          </div>
+          <div class="script-step">
+            <div class="script-editor"><label><strong>Début de la catastrophe</strong><textarea id="catastropheBeginning" rows="8"></textarea></label></div>
+            <aside class="script-guidance"><h4>Éléments à intégrer</h4><ul><li>Décrivez comment la crainte commence à se réaliser.</li><li>Ce que vous voyez, entendez et ressentez.</li><li>Les premières réactions des autres.</li><li>Évitez les formulations vagues comme « quelque chose de grave ».</li></ul></aside>
+          </div>
+          <div class="script-step hotspot-step">
+            <div class="script-editor"><label><strong>Le pire moment</strong><textarea id="catastropheWorst" rows="12"></textarea></label></div>
+            <aside class="script-guidance"><h4>Éléments à intégrer</h4><ul><li>Décrivez précisément la pire conséquence imaginée.</li><li>Allez jusqu’au terme du scénario, sans interrompre le récit avant le pire.</li><li>Incluez les images, sons et sensations corporelles.</li><li>Décrivez vos pensées, émotions et comportements.</li><li>Précisez ce que les autres pensent, disent ou font.</li><li>N’introduisez pas de réassurance ni de résolution prématurée.</li></ul></aside>
+          </div>
+          <div class="script-step">
+            <div class="script-editor"><label><strong>Conséquences durables</strong><textarea id="catastropheConsequences" rows="9"></textarea></label></div>
+            <aside class="script-guidance"><h4>Éléments à intégrer</h4><ul><li>Ce qui se passe dans les heures, jours ou semaines suivantes.</li><li>Les conséquences concrètes sur votre vie.</li><li>Ce que cette catastrophe signifierait pour vous.</li><li>Évitez de neutraliser le scénario par une issue rassurante.</li></ul></aside>
+          </div>
+          <div class="script-step">
+            <div class="script-editor"><label><strong>Fin du scénario</strong><textarea id="catastropheEnding" rows="8"></textarea></label></div>
+            <aside class="script-guidance"><h4>Éléments à intégrer</h4><ul><li>Donnez une fin claire au récit.</li><li>Décrivez la réalité finale après la catastrophe.</li><li>La fin peut être douloureuse ou incertaine, mais doit rester cohérente et plausible.</li><li>Ne terminez pas par une formule rassurante destinée à réduire immédiatement l’émotion.</li></ul></aside>
+          </div>
+        </div>
+
+<div id="traumaReminder" class="script-reminder"><h3>Rappels de rédaction — souvenir traumatique</h3><div class="script-reminder-grid"><span>Première personne</span><span>Présent de narration</span><span>Ordre chronologique</span><span>Détails sensoriels</span><span>Pensées et émotions</span><span>Pas d’analyse pendant le récit</span><span>Inclure les passages évités</span><span>Texte directement lisible en séance</span></div></div>
+<div id="catastropheReminder" class="script-reminder hidden"><h3>Rappels de rédaction — scénario catastrophe</h3><div class="script-reminder-grid"><span>Première personne</span><span>Présent de narration</span><span>Scénario concret et spécifique</span><span>Aller jusqu’à la pire conséquence</span><span>Détails sensoriels et émotionnels</span><span>Éviter les formulations abstraites</span><span>Ne pas introduire de réassurance</span><span>Texte directement lisible en exposition</span></div></div>
+<div class="button-row">
+          <button id="deleteScriptBtn" type="button" class="danger hidden">Supprimer</button>
+          <div class="button-group">
+            <button id="exportScriptPdfBtn" type="button" class="secondary"><span class="button-icon" aria-hidden="true">□</span>Créer le PDF</button>
+            <button type="submit" class="primary"><span class="button-icon" aria-hidden="true">✓</span>Enregistrer le script</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+<section id="new" class="view">
+<div id="prep" class="card"><h2>Préparer l’exposition</h2><p class="module-subtitle">Configurez la séance et choisissez les mesures utiles.</p><form id="sf">
+<div class="grid"><label>Patient *<select id="spatient" required></select></label>
+<label>Titre *<input id="stitle" value="Exposition" required></label>
+<label>Type<select id="stype"><option>In vivo</option><option>Intéroceptive</option><option>En imagination</option><option>Exposition avec prévention de la réponse</option><option>Réalité virtuelle</option><option>Script</option><option>Autre</option></select></label>
+<label>Cible thérapeutique
+  <select id="therapeuticTarget">
+    <option value="Invalidation des attentes">Invalidation des attentes</option>
+    <option value="Habituation">Habituation</option>
+  </select>
+</label>
+<label>Contexte<input id="scontext" value="En séance"></label>
+<label>Nature de l’émotion cible
+  <input id="targetEmotionName" placeholder="Ex. peur, honte, dégoût">
+</label></div>
+<label>Situation ou stimulus cible *<span class="fieldhelp">Décrivez concrètement ce à quoi le patient va s’exposer : situation, objet, sensation, souvenir ou action.</span><textarea id="target" required></textarea></label>
+<label id="fearedOutcomeField">Issue redoutée précise *<span class="fieldhelp">Formulez ce que le patient pense qu’il pourrait réellement se produire pendant ou après l’exposition.</span><textarea id="fear" required></textarea></label>
+<div id="initialExpectancyBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useInitialExpectancy" type="checkbox" checked><span>Inclure cette dimension dans le suivi</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Évaluation de la probabilité d’occurrence de l’issue redoutée</div>
+    <div class="sliderline"><span>0 — impossible</span><b id="iexv">70</b><span>100 — certaine</span></div>
+    <input id="iex" type="range" min="0" max="100" value="70">
+  </div>
+</div>
+<div id="expectedSeverityBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useExpectedSeverity" type="checkbox" checked><span>Inclure cette dimension dans le suivi</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Évaluation de la gravité de l’issue redoutée</div>
+    <div class="sliderline"><span>0 — sans gravité</span><b id="isevv">70</b><span>100 — gravité maximale</span></div>
+    <input id="isev" type="range" min="0" max="100" value="70">
+  </div>
+</div>
+
+<div id="exerciseDifficultyBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useExerciseDifficulty" type="checkbox" checked><span>Inclure cette dimension dans le suivi</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Évaluation de la difficulté anticipée de l’exercice</div>
+    <div class="sliderline"><span>0 — très facile</span><b id="difficultyv">50</b><span>100 — extrêmement difficile</span></div>
+    <input id="difficulty" type="range" min="0" max="100" value="50">
+  </div>
+</div>
+<label id="learningGoalField">Apprentissage recherché / hypothèse à tester<span class="fieldhelp">Indiquez ce que l’exposition doit permettre de vérifier, découvrir ou apprendre.</span><textarea id="goal"></textarea></label>
+<label>Comportements de sécurité à réduire<span class="fieldhelp">Précisez les stratégies utilisées pour se rassurer, éviter ou contrôler artificiellement la situation.</span><textarea id="safetygoal"></textarea></label>
+
+<div id="invalidationPlan" class="target-specific-panel">
+  <div class="section-heading">
+    <h3>Plan d’exposition — invalidation des attentes</h3>
+    <p>Ces éléments précisent ce que le patient va mettre à l’épreuve et la manière dont l’exercice sera réalisé.</p>
+  </div>
+
+  <div class="grid"><label><strong>Qu’est-ce que je mets à l’épreuve ?</strong>
+      <span class="field-help plan-help">Précisez la crainte principale : rejet, perte de contrôle, atteinte physique, détresse intolérable, etc.</span>
+      <textarea id="planFearTested" rows="3"></textarea>
+    </label>
+  </div>
+
+  <label><strong>Comment est-ce que je la mets à l’épreuve ?</strong>
+    <span class="field-help plan-help">Décrivez concrètement ce que le patient va faire pendant cet exercice d’exposition.</span>
+    <textarea id="planHowTest" rows="3"></textarea>
+  </label>
+
+  <div class="plan-strategies">
+    <h4>Stratégies pour cette exposition</h4>
+    <label><strong>À quoi est-ce que je renonce ?</strong>
+      <span class="field-help plan-help">Comportements de sécurité, évitements, vérifications, demandes de réassurance ou autres stratégies à abandonner.</span>
+      <textarea id="planGiveUp" rows="3"></textarea>
+    </label>
+    <label><strong>Comment vais-je rester dans la situation ?</strong>
+      <span class="field-help plan-help">Indiquez comment poursuivre l’exercice malgré l’émotion ou l’envie d’interrompre.</span>
+      <textarea id="planStay" rows="3"></textarea>
+    </label>
+    <label><strong>Comment vais-je combiner les éléments ?</strong>
+      <span class="field-help plan-help">Précisez les prédicteurs ou contextes qui seront combinés afin d’augmenter la valeur du test.</span>
+      <textarea id="planCombine" rows="3"></textarea>
+    </label>
+    <label><strong>Comment vais-je l’affronter ?</strong>
+      <span class="field-help plan-help">Décrivez l’attitude ou la stratégie d’engagement choisie face à l’issue redoutée.</span>
+      <textarea id="planFace" rows="3"></textarea>
+    </label>
+  </div>
+
+  <label><strong>Mis bout à bout : quelle est mon exposition ?</strong>
+    <span class="field-help plan-help">Résumez l’exercice complet tel qu’il sera effectivement réalisé.</span>
+    <textarea id="planFullExposure" rows="4"></textarea>
+  </label>
+</div>
+<div id="invalidationReference" class="module-reference">Craske, M. G., Treanor, M., Zbozinek, T. D., &amp; Vervliet, B. (2022). <em>Optimizing exposure therapy with an inhibitory retrieval approach and the OptEx Nexus.</em> <em>Behaviour Research and Therapy, 152</em>, 104069.</div><button class="primary big"><span class="button-icon" aria-hidden="true">→</span>Démarrer la séance</button></form></div>
+
+<div id="live" class="hidden live-mode">
+<div class="card livehead"><div><h2 id="livetitle"></h2><p id="livesub"></p></div><div id="timer">00:00</div></div>
+<div class="grid">
+<div class="card"><h3>Mesure actuelle</h3>
+<div id="currentMeasureOptions" class="metricoptions"><label id="emotionMeasureOption" class="checkline"><input id="useEmotion" type="checkbox" checked> Enregistrer l’intensité de l’émotion cible</label><label id="expectancyMeasureOption" class="checkline"><input id="useExpectancy" type="checkbox" checked> Enregistrer la probabilité de l’issue redoutée</label></div><div id="metrics"></div>
+<label>Observation<span class="fieldhelp">Notez les pensées, comportements de sécurité, réactions observées ou tout autre détail utile.</span><textarea id="mnote" rows="4"></textarea></label>
+<button id="record" class="primary big">Enregistrer la mesure</button><p id="mstatus"></p></div>
+<div class="card"><h3>Évolution</h3><select id="liveMetric"></select><div id="liveChartsContainer">
+  <div class="chart-wrap"><canvas id="liveChart"></canvas><div class="chart-tooltip hidden"></div></div>
+  <div id="liveChartSecondaryWrap" class="chart-wrap hidden"><canvas id="liveChartSecondary"></canvas><div class="chart-tooltip hidden"></div></div>
+</div></div>
+</div><div class="card"><button id="finish" class="danger big">Terminer et débriefer</button></div></div>
+
+<div id="debrief" class="hidden debrief-mode">
+<div class="debrief-grid">
+<div class="card">
+<h2>Débriefing</h2>
+<form id="df">
+<div id="finalExpectancyBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useFinalExpectancy" type="checkbox" checked><span>Inclure cette dimension dans le compte rendu</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Évaluation de la probabilité d’occurrence de l’issue redoutée, si l’exercice était recommencé</div>
+    <div class="sliderline"><span>0 — impossible</span><b id="fexv">50</b><span>100 — certaine</span></div>
+    <input id="fex" type="range" min="0" max="100" value="50">
+  </div>
+</div>
+<label id="occurredField">Le résultat redouté est-il survenu ?<select id="occur"><option value="Non">Non</option><option value="Partiellement">Partiellement</option><option value="Oui">Oui</option></select></label>
+<div id="invalidationJournal">
+  <label><strong>Comment le savez-vous ?</strong>
+    <span class="field-help debrief-help">Indiquez les éléments observables permettant de conclure si l’issue redoutée s’est produite ou non.</span>
+    <textarea id="howKnow" rows="3"></textarea>
+  </label>
+  <label><strong>À quoi vous attendiez-vous ? Qu’est-ce qui s’est passé ?</strong>
+    <span class="field-help debrief-help">Comparez la prédiction initiale avec les événements réellement observés.</span>
+    <textarea id="expectedVsActual" rows="4"></textarea>
+  </label>
+</div>
+<label id="actualOutcomeField">Ce qui s’est réellement produit<textarea id="actual"></textarea></label>
+<div id="actualSeverityBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useActualSeverity" type="checkbox" checked><span>Inclure cette dimension dans le compte rendu</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Évaluation de la gravité réelle de l’issue redoutée</div>
+    <div class="sliderline"><span>0 — sans gravité</span><b id="asevv">0</b><span>100 — gravité maximale</span></div>
+    <input id="asev" type="range" min="0" max="100" value="0">
+  </div>
+</div>
+<div id="surpriseBlock" class="slider selectable-slider">
+  <div class="dimension-toggle">
+    <label class="checkline"><input id="useSurprise" type="checkbox" checked><span>Inclure cette dimension dans le compte rendu</span></label>
+  </div>
+  <div class="dimension-content">
+    <div class="dimension-title">Surprise / écart entre attentes et observation</div>
+    <div class="sliderline"><span>0 — aucune surprise</span><b id="surpv">50</b><span>100 — surprise maximale</span></div>
+    <input id="surp" type="range" min="0" max="100" value="50">
+  </div>
+</div>
+<label>Ce que le patient a appris<textarea id="learn"></textarea></label>
+<label id="nextStepField">Prochaine étape<textarea id="next"></textarea></label>
+<div id="debriefInvalidationReference" class="module-reference">Craske, M. G., Treanor, M., Zbozinek, T. D., &amp; Vervliet, B. (2022). <em>Optimizing exposure therapy with an inhibitory retrieval approach and the OptEx Nexus.</em> <em>Behaviour Research and Therapy, 152</em>, 104069.</div><button class="primary big">Enregistrer et terminer</button>
+</form>
+</div>
+<div class="card debrief-graph-card">
+<div class="chart-head"><h2>Mesures enregistrées</h2><select id="debriefMetric"></select></div>
+<div id="debriefChartsContainer">
+  <div class="chart-wrap" id="debriefChartPrimaryWrap"><canvas id="debriefChart"></canvas><div class="chart-tooltip hidden"></div></div>
+  <div class="chart-wrap hidden" id="debriefChartSecondaryWrap"><canvas id="debriefChartSecondary"></canvas><div class="chart-tooltip hidden"></div></div>
+</div>
+<div id="debriefObservations" class="observations"></div>
+</div>
+</div>
+</div>
+</section>
+
+
+<section id="optex" class="view">
+  <div class="module-header">
+    <div>
+      <h2>OptEx</h2><p class="module-subtitle">Structurez les prédicteurs, inhibiteurs et l’exposition optimale.</p>
+     
+    </div>
+    <button id="newOptExBtn" class="secondary"><span class="button-icon" aria-hidden="true">+</span>Nouvel Optex Nexus</button>
+  </div>
+
+  <div class="module-layout">
+    <aside class="card module-list-card">
+      <h3>Nexus enregistrés</h3>
+      <label>Patient
+        <select id="optexPatientFilter"></select>
+      </label>
+      <div id="optexList" class="module-list"></div>
+    </aside>
+
+    <div class="card">
+      <form id="optexForm">
+        <input id="optexId" type="hidden">
+        <div class="grid">
+          <label>Patient *
+            <select id="optexPatient" required></select>
+          </label>
+          <label>Titre
+            <input id="optexTitle" value="OptEx Nexus">
+          </label>
+        </div>
+
+        <label class="prominent-field"><strong>Issue redoutée *</strong>
+          <span class="field-help">Décrivez précisément l’événement ou la conséquence que le patient cherche à éviter.</span>
+          <textarea id="optexOutcome" rows="2" required></textarea>
+        </label>
+
+        <div class="nexus-sequence">
+          <section class="nexus-step excitatory">
+            <div class="nexus-panel-title">
+              <span class="nexus-symbol">+</span>
+              <div>
+                <h3>1. Prédicteurs de l’issue redoutée</h3>
+                <p>Commencez par identifier les signaux, contextes et expériences internes qui augmentent la prédiction de l’issue redoutée.</p>
+              </div>
+            </div>
+            <div id="predictorCategories"></div>
+
+            <label><strong>Principal stimulus conditionnel</strong>
+              <span class="field-help">Indiquez le signal, la situation ou le contexte qui prédit le plus fortement l’issue redoutée.</span>
+              <textarea id="optexPrincipalCS" rows="4"></textarea>
+            </label>
+          </section>
+
+          <section class="nexus-step inhibitory">
+            <div class="nexus-panel-title">
+              <span class="nexus-symbol">−</span>
+              <div>
+                <h3>2. Inhibiteurs</h3>
+                <p>Identifiez ensuite ce qui réduit artificiellement la perception du risque ou empêche le patient de tester pleinement ses attentes.</p>
+              </div>
+            </div>
+
+            <label><strong>Comportements de sécurité</strong>
+              <span class="field-help inhibitor-help">Actions destinées à prévenir, contrôler ou limiter l’issue redoutée, par exemple vérifier, se rapprocher d’une sortie ou demander de l’aide.</span>
+              <textarea id="optexSafetyBehaviors" rows="5"></textarea>
+            </label>
+            <label><strong>Pensées rassurantes</strong>
+              <span class="field-help inhibitor-help">Pensées utilisées pour diminuer l’anxiété ou neutraliser la menace, sans véritablement tester la prédiction.</span>
+              <textarea id="optexReassuringThoughts" rows="5"></textarea>
+            </label>
+            <label><strong>Objets contra-phobiques</strong>
+              <span class="field-help inhibitor-help">Objets conservés à proximité pour se sentir protégé ou capable de faire face à la situation.</span>
+              <textarea id="optexCounterphobicObjects" rows="5"></textarea>
+            </label>
+            <label><strong>Endroits sûrs</strong>
+              <span class="field-help inhibitor-help">Lieux ou positions utilisés comme refuge ou comme moyen de réduire rapidement la menace perçue.</span>
+              <textarea id="optexSafePlaces" rows="5"></textarea>
+            </label>
+            <label><strong>Autres inhibiteurs</strong>
+              <span class="field-help inhibitor-help">Toute autre stratégie, personne, condition ou ressource qui réduit la perception du risque ou limite l’apprentissage.</span>
+              <textarea id="optexOtherInhibitors" rows="5"></textarea>
+            </label>
+          </section>
+        </div>
+
+        <div class="optimal-exposure">
+          <h3>Exposition optimale</h3>
+          <div class="grid">
+            <label><strong>Exercice proposé *</strong>
+              <span class="field-help opt-help">Combinez les prédicteurs pertinents tout en réduisant les inhibiteurs qui empêchent l’apprentissage.</span>
+              <textarea id="optexOptimalExposure" rows="4" required></textarea>
+            </label>
+            <label><strong>Durée ou critère d’arrêt</strong>
+              <span class="field-help opt-help">Durée prévue, nombre de répétitions ou critère clinique de fin.</span>
+              <textarea id="optexDuration" rows="4"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="deleteOptExBtn" type="button" class="danger hidden">Supprimer</button>
+          <div class="button-group">
+            <button id="exportOptExPdfBtn" type="button" class="secondary"><span class="button-icon" aria-hidden="true">□</span>Exporter en PDF</button>
+            <button type="submit" class="primary"><span class="button-icon" aria-hidden="true">✓</span>Enregistrer le Nexus</button>
+          </div>
+        </div>
+      </form>
+      <div class="module-reference">
+        Craske, M. G., Treanor, M., Zbozinek, T. D., &amp; Vervliet, B. (2022).
+        <em>Optimizing exposure therapy with an inhibitory retrieval approach and the OptEx Nexus.</em>
+        <em>Behaviour Research and Therapy, 152</em>, 104069.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hierarchy" class="view">
+  <div class="module-header">
+    <div>
+      <h2>Hiérarchie</h2><p class="module-subtitle">Organisez les exercices du plus accessible au plus difficile.</p>
+    </div>
+    <button id="newHierarchyBtn" class="secondary"><span class="button-icon" aria-hidden="true">+</span>Nouvelle hiérarchie</button>
+  </div>
+
+  <div class="module-layout">
+    <aside class="card module-list-card">
+      <h3>Hiérarchies enregistrées</h3>
+      <label>Patient
+        <select id="hierarchyPatientFilter"></select>
+      </label>
+      <div id="hierarchyList" class="module-list"></div>
+    </aside>
+
+    <div class="card">
+      <form id="hierarchyForm">
+        <input id="hierarchyId" type="hidden">
+        <div class="grid">
+          <label>Patient *
+            <select id="hierarchyPatient" required></select>
+          </label>
+          <label>Titre de la hiérarchie *
+            <input id="hierarchyTitle" required placeholder="Ex. Peur de conduire">
+          </label>
+        </div>
+
+        <label><strong>Issue redoutée principale</strong>
+          <span class="field-help">Événement ou conséquence dont la probabilité sera testée au fil des exercices.</span>
+          <textarea id="hierarchyOutcome" rows="2"></textarea>
+        </label>
+
+        <div class="hierarchy-toolbar">
+          <div>
+            <h3>Exercices</h3>
+            <p class="muted">Ajoutez des situations puis classez-les du niveau le plus faible au plus élevé.</p>
+          </div>
+          <div>
+            <button id="addHierarchyItemBtn" type="button" class="secondary">Ajouter un exercice</button>
+            <button id="sortHierarchyBtn" type="button" class="primary">Trier par intensité</button>
+          </div>
+        </div>
+
+        <div class="hierarchy-table-wrap">
+          <table class="hierarchy-table">
+            <thead>
+              <tr>
+                <th>Niveau</th>
+                <th>Situation ou exercice</th>
+                <th>Émotion<br>0–100</th>
+                
+                
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="hierarchyItems"></tbody>
+          </table>
+        </div>
+
+        <label>Notes générales
+          <textarea id="hierarchyNotes" rows="3"></textarea>
+        </label>
+
+        <div class="button-row">
+          <button id="deleteHierarchyBtn" type="button" class="danger hidden">Supprimer</button>
+          <div class="button-group">
+            <button id="exportHierarchyPdfBtn" type="button" class="secondary"><span class="button-icon" aria-hidden="true">□</span>Exporter en PDF</button>
+            <button type="submit" class="primary"><span class="button-icon" aria-hidden="true">✓</span>Enregistrer la hiérarchie</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="history" class="view"><div class="history">
+<div class="card"><h2>Historique d’exposition</h2><p class="module-subtitle">Retrouvez les exercices réalisés et leurs comptes rendus.</p><label>Patient<select id="hpatient"></select></label><div id="slist"></div></div>
+<div class="card"><div id="hempty"><h2>Consulter une séance</h2><p>Sélectionnez une séance.</p></div>
+<div id="hdetail" class="hidden"><h2 id="htitle"></h2><div id="hsummary"></div><select id="hmetric"></select><div id="historyChartsContainer">
+  <div class="chart-wrap" id="historyChartPrimaryWrap"><h3 id="historyChartPrimaryTitle" class="chart-title"></h3><canvas id="hchart"></canvas><div class="chart-tooltip hidden"></div></div>
+  <div class="chart-wrap hidden" id="historyChartSecondaryWrap"><h3 id="historyChartSecondaryTitle" class="chart-title"></h3><canvas id="hchartSecondary"></canvas><div class="chart-tooltip hidden"></div></div>
+</div><div id="hobservations" class="observations"></div>
+<div class="buttons"><button id="exportsession"><span class="button-icon" aria-hidden="true">□</span>Ouvrir le PDF</button><button id="deletesession" class="danger">Supprimer</button></div></div></div></div></section>
+
+
+<section id="notice" class="view">
+  <div class="notice-page">
+    <div class="card notice-intro">
+      <h2>Notice d’utilisation</h2><p class="module-subtitle">Consultez le fonctionnement de chaque module.</p>
+      <p>Cette application aide le clinicien à préparer, conduire et documenter des exercices d’exposition. Les données sont conservées localement dans le navigateur.</p>
+    </div>
+
+    <div class="notice-grid">
+      <article class="card notice-step">
+        <h3>Patients</h3>
+        <p>Créez un dossier pseudonymisé avant toute utilisation.</p>
+        <ol>
+          <li>Ouvrez l’onglet <strong>Patients</strong>.</li>
+          <li>Saisissez un code patient et résumez sa problématique.</li>
+          <li>Enregistrez le patient.</li>
+          <li>Pour supprimer un patient, survolez sa fiche puis cliquez sur le cercle rouge.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>OptEx Nexus</h3>
+        <p>Cartographiez les prédicteurs, les inhibiteurs et l’exposition optimale.</p>
+        <ol>
+          <li>Sélectionnez un patient.</li>
+          <li>Ajoutez chaque prédicteur sur une ligne distincte.</li>
+          <li>Vous pouvez préciser pour chacun s’il s’agit d’un SC, d’un OS ou ne renseigner aucune catégorie.</li>
+          <li>Renseignez les inhibiteurs.</li>
+          <li>Décrivez l’exposition optimale puis exportez la synthèse PDF.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Hiérarchie des peurs</h3>
+        <p>Organisez progressivement les exercices d’exposition.</p>
+        <ol>
+          <li>Sélectionnez un patient.</li>
+          <li>Ajoutez les exercices envisagés.</li>
+          <li>Évaluez l’intensité émotionnelle attendue.</li>
+          <li>Triez les exercices par intensité.</li>
+          <li>Exportez la synthèse PDF.</li>
+          <li>Après exportation, supprimez la hiérarchie si elle contient des données identifiantes'.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Rédaction de script</h3>
+        <p>Préparez un souvenir traumatique ou un scénario catastrophe destiné à l’exposition.</p>
+        <ol>
+          <li>Sélectionnez un patient.</li>
+          <li>Choisissez entre souvenir traumatique et scénario catastrophe.</li>
+          <li>Rédigez chaque partie du script à l’aide des recommandations affichées.</li>
+          <li>Enregistrez le script pour pouvoir le modifier ultérieurement.</li>
+          <li>Exportez un PDF contenant le texte du script.</li>
+          <li>Après exportation, supprimez le script s'il contient des données identifiantes'.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Nouvelle exposition</h3>
+        <p>Préparez l’exercice et choisissez sa cible thérapeutique.</p>
+        <ol>
+          <li>Sélectionnez le patient à l’aide de la recherche.</li>
+          <li>Choisissez le type d’exposition.</li>
+          <li>Choisissez <strong>Habituation</strong> ou <strong>Invalidation des attentes</strong>.</li>
+          <li>Renseignez la situation cible et les évaluations proposées.</li>
+          <li>Démarrez l’exercice.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Historique</h3>
+        <p>Consultez les séances passées d'exposition 'et leurs graphiques.</p>
+        <ol>
+          <li>Recherchez ou filtrez un patient.</li>
+          <li>Sélectionnez une séance.</li>
+          <li>Consultez la synthèse, le graphique et les observations.</li>
+          <li>Exportez le compte rendu PDF ou supprimez la séance.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Habituation</h3>
+        <p>Le suivi porte principalement sur l’évolution de l’intensité émotionnelle.</p>
+        <ol>
+          <li>Évaluez la difficulté anticipée.</li>
+          <li>Pendant l’exercice, enregistrez régulièrement l’intensité de l’émotion cible.</li>
+          <li>Ajoutez une observation lorsqu’un événement clinique important survient.</li>
+          <li>Terminez par un bilan de l’exercice.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Invalidation des attentes</h3>
+        <p>Le suivi porte sur la mise à l’épreuve de l’issue redoutée.</p>
+        <ol>
+          <li>Formulez précisément l’issue redoutée.</li>
+          <li>Évaluez sa probabilité, sa gravité et la difficulté de l’exercice.</li>
+          <li>Renseignez le plan d’exposition.</li>
+          <li>Pendant l’exercice, enregistrez la probabilité d’occurrence de l’issue redoutée, et éventuellement l’intensité émotionnelle.</li>
+          <li>Dans le débriefing, comparez la prédiction et ce qui s’est effectivement produit.</li>
+        </ol>
+      </article>
+<article class="card notice-step">
+        <h3>Sauvegarde</h3>
+        <p>Sauvegardez régulièrement les données locales.</p>
+        <ol>
+          <li>Ouvrez l’onglet <strong>Sauvegarde</strong>.</li>
+          <li>Téléchargez un fichier de sauvegarde.</li>
+          <li>Conservez-le dans un emplacement sécurisé.</li>
+          <li>Utilisez la restauration pour réimporter les données.</li>
+        </ol>
+      </article>
+</div>
+  </div>
+</section>
+<section id="backup" class="view"><div class="grid"><div class="card"><h2>Sauvegarder</h2><button id="exportall" class="primary big">Télécharger une sauvegarde</button></div>
+<div class="card"><h2>Restaurer</h2><input id="importfile" type="file" accept=".json"><button id="importall" class="big">Restaurer</button></div></div>
+<div class="card warning"><b>Important :</b> effectuez régulièrement une sauvegarde. La suppression des données du navigateur peut effacer les dossiers locaux.</div></section>
+</main><div id="toast" class="toast hidden"></div><script src="app.js"></script></body></html>
