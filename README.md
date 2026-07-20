@@ -4,7 +4,7 @@
 Il a été créé par Thierry Kosinski (Enseignant-chercheur en Psychopathologie Expérimentale et TCC) au Laboratoire PSITEC (ULR4072) de l'Université de Lille (France) (contact : thierry.kosinski@univ-lille.fr). 
 
 Il permet de préparer, conduire, documenter et consulter des exercices d’exposition en séance.
-Il est accessible depuis cette adresse : https://thierryk4072.github.io/Exposition/ 
+Il est accessible depuis cette adresse : https://therapie-exposition.com 
 
 ## Fonctionnalités
 
